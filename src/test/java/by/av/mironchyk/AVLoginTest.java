@@ -1,10 +1,10 @@
 package by.av.mironchyk;
 
-
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.*;
 import org.openqa.selenium.support.ui.*;
+
 import java.time.Duration;
 
 public class AVLoginTest {
@@ -30,7 +30,7 @@ public class AVLoginTest {
 
         emailLoginButton.click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("login")));  // Предполагается, что поле для логина имеет имя "login"
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("login")));
 
 
         Assertions.assertTrue(driver.findElement(By.name("login")).isDisplayed(), "Форма для входа по почте отображается.");
