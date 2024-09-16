@@ -2,7 +2,6 @@ package by.av.mironchyk;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
-
 import java.time.Duration;
 
 public class AVLoginMethods {

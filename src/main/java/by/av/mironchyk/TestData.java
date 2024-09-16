@@ -14,7 +14,6 @@ public class TestData {
         return "Artem555";
     }
 
-
     public static String getRandomEmail() {
         return faker.name().firstName().toLowerCase() + faker.number().randomDigit() + "@gmail.com";
     }

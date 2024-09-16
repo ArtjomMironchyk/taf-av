@@ -91,7 +91,6 @@ public class AVLoginTest {
         loginMethods.clickSubmit();
 
         String expectedEmailError = "";
-
     }
 
     @AfterEach
