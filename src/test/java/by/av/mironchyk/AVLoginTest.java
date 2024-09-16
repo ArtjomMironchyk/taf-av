@@ -1,14 +1,16 @@
 package by.av.mironchyk;
 
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.*;
-import org.openqa.selenium.support.ui.*;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.time.Duration;
-
+@TestMethodOrder(OrderAnnotation.class)
 public class AVLoginTest {
+
     WebDriver driver;
+    AVLoginMethods loginMethods;
 
     @BeforeEach
     public void setUp() {
@@ -16,24 +18,80 @@ public class AVLoginTest {
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         driver.get("https://av.by/");
+        loginMethods = new AVLoginMethods(driver);
     }
 
     @Test
-    public void testLoginByEmailButton() {
+    @Order(1)
+    public void testLoginWithValidData() {
+        loginMethods.openLoginPage();
+        loginMethods.enterEmail(TestData.getValidEmail());
+        loginMethods.enterPassword(TestData.getValidPassword());
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Войти']")));
+        String expectedUrlAfterLogin = "https://av.by/";
+        Assertions.assertEquals(expectedUrlAfterLogin, driver.getCurrentUrl(), "Успешный вход не выполнен.");
+        System.out.println("Успешный вход выполнен.");
+    }
 
-        loginButton.click();
+    @Test
+    @Order(2)
+    public void testLoginWithGeneratedInvalidData() {
+        loginMethods.openLoginPage();
 
-        WebElement emailLoginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='почте или логину']")));
+        loginMethods.enterEmail(TestData.getRandomEmail());
+        loginMethods.enterPassword(TestData.getRandomPassword());
+        loginMethods.clickSubmit();
 
-        emailLoginButton.click();
+        String errorMessage = loginMethods.getEmailErrorMessage();
+        String expectedEmailError = "Неверный логин или пароль. Если забыли пароль, восстановите его";
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("login")));
+        if (errorMessage != null) {
+            Assertions.assertEquals(expectedEmailError, errorMessage, "Сообщение об ошибке под полем email неверное.");
+            System.out.println("Сообщение об ошибке: " + errorMessage);
+        } else {
+            System.out.println("Ошибок нет.");
+        }
+    }
 
+    @Test
+    @Order(3)
+    public void testLoginWithSpacesInFields() {
+        loginMethods.openLoginPage();
 
-        Assertions.assertTrue(driver.findElement(By.name("login")).isDisplayed(), "Форма для входа по почте отображается.");
+        loginMethods.enterEmail(TestData.getSpaceForEmail());
+        loginMethods.enterPassword(TestData.getSpaceForPassword());
+        loginMethods.clickSubmit();
+
+        String expectedEmailError = "Заполните оба поля";
+        String expectedPasswordError = "Заполните поле";
+
+        String emailError = loginMethods.getEmailErrorMessage();
+        if (emailError != null) {
+            Assertions.assertEquals(expectedEmailError, emailError, "Сообщение об ошибке под полем email неверное.");
+
+        }
+
+        String passwordError = loginMethods.getPasswordErrorMessage();
+        if (passwordError != null) {
+            Assertions.assertEquals(expectedPasswordError, passwordError, "Сообщение об ошибке под полем пароля неверное.");
+        }
+
+        if (expectedEmailError.equals(emailError) && expectedPasswordError.equals(passwordError)) {
+            System.out.println("Ошибок нет.");
+        }
+    }
+
+    @Test
+    @Order(4)
+    public void testLoginWithOneInFields() {
+        loginMethods.openLoginPage();
+
+        loginMethods.enterEmail(TestData.getOneForEmailAndPassword());
+        loginMethods.enterPassword(TestData.getOneForEmailAndPassword());
+        loginMethods.clickSubmit();
+
+        String expectedEmailError = "";
+
     }
 
     @AfterEach
