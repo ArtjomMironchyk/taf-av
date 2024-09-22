@@ -25,8 +25,8 @@ public class AVLoginTest {
     @Order(1)
     public void testLoginWithValidData() {
         loginMethods.openLoginPage();
-        loginMethods.enterEmail(TestData.getValidEmail());
-        loginMethods.enterPassword(TestData.getValidPassword());
+        loginMethods.enterEmail(AVLoginPage.getValidEmail());
+        loginMethods.enterPassword(AVLoginPage.getValidPassword());
 
         String expectedUrlAfterLogin = "https://av.by/";
         Assertions.assertEquals(expectedUrlAfterLogin, driver.getCurrentUrl(), "Успешный вход не выполнен.");
@@ -38,8 +38,8 @@ public class AVLoginTest {
     public void testLoginWithGeneratedInvalidData() {
         loginMethods.openLoginPage();
 
-        loginMethods.enterEmail(TestData.getRandomEmail());
-        loginMethods.enterPassword(TestData.getRandomPassword());
+        loginMethods.enterEmail(AVLoginPage.getRandomEmail());
+        loginMethods.enterPassword(AVLoginPage.getRandomPassword());
         loginMethods.clickSubmit();
 
         String errorMessage = loginMethods.getEmailErrorMessage();
@@ -58,8 +58,8 @@ public class AVLoginTest {
     public void testLoginWithSpacesInFields() {
         loginMethods.openLoginPage();
 
-        loginMethods.enterEmail(TestData.getSpaceForEmail());
-        loginMethods.enterPassword(TestData.getSpaceForPassword());
+        loginMethods.enterEmail(AVLoginPage.getSpaceForEmail());
+        loginMethods.enterPassword(AVLoginPage.getSpaceForPassword());
         loginMethods.clickSubmit();
 
         String expectedEmailError = "Заполните оба поля";
@@ -86,8 +86,8 @@ public class AVLoginTest {
     public void testLoginWithOneInFields() {
         loginMethods.openLoginPage();
 
-        loginMethods.enterEmail(TestData.getOneForEmailAndPassword());
-        loginMethods.enterPassword(TestData.getOneForEmailAndPassword());
+        loginMethods.enterEmail(AVLoginPage.getOneForEmailAndPassword());
+        loginMethods.enterPassword(AVLoginPage.getOneForEmailAndPassword());
         loginMethods.clickSubmit();
 
         String expectedEmailError = "";

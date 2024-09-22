@@ -2,7 +2,7 @@ package by.av.mironchyk;
 
 import com.github.javafaker.Faker;
 
-public class TestData {
+public class AVLoginPage {
 
     private static Faker faker = new Faker();
 
