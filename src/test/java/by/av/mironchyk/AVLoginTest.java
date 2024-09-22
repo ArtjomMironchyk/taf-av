@@ -45,7 +45,7 @@ public class AVLoginTest {
         loginPage.inputEmail(" ");
         loginPage.inputPassword(" ");
         loginPage.clickButtonEnter();
-        String errorMessage = loginPage.getErrorMessage();
+        String errorMessage = loginPage.getEmailErrorMessage();
         assertEquals("Заполните оба поля", errorMessage);
     }
 

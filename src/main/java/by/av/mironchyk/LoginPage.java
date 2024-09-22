@@ -42,6 +42,19 @@ public class LoginPage {
         buttonEnter.click();
     }
 
+    public String getEmailErrorMessage() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        By errorMessageBy = By.xpath(LoginPageXPath.EMAIL_ERROR_MESSAGE_XPATH);
+        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessageBy));
+        return errorMessage.getText();
+    }
+
+    public String getPasswordErrorMessage() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        By errorMessageBy = By.xpath(LoginPageXPath.PASSWORD_ERROR_MESSAGE_XPATH);
+        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessageBy));
+        return errorMessage.getText();
+    }
     public String getErrorMessage() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         By errorMessageBy = By.xpath(LoginPageXPath.ERROR_MESSAGE_XPATH);
