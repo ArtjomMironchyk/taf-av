@@ -1,100 +1,67 @@
 package by.av.mironchyk;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@TestMethodOrder(OrderAnnotation.class)
 public class AVLoginTest {
-
-    WebDriver driver;
-    AVLoginMethods loginMethods;
+    private WebDriver driver;
+    private HomePage homePage;
+    private LoginPage loginPage;
 
     @BeforeEach
     public void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
-        driver.get("https://av.by/");
-        loginMethods = new AVLoginMethods(driver);
+        driver = new ChromeDriver();
+        driver.get("https://av.by");
+        homePage = new HomePage(driver);
+        loginPage = new LoginPage(driver);
+        homePage.clickButtonLogin();
+        loginPage.clickTabLoginByEmail();
     }
 
     @Test
-    @Order(1)
-    public void testLoginWithValidData() {
-        loginMethods.openLoginPage();
-        loginMethods.enterEmail(AVLoginPage.getValidEmail());
-        loginMethods.enterPassword(AVLoginPage.getValidPassword());
-
-        String expectedUrlAfterLogin = "https://av.by/";
-        Assertions.assertEquals(expectedUrlAfterLogin, driver.getCurrentUrl(), "Успешный вход не выполнен.");
-        System.out.println("Успешный вход выполнен.");
+    public void testInvalidEmailWithoutAtSymbol() {
+        loginPage.inputEmail("emailwithoutat.com");
+        loginPage.inputPassword("validPassword123");
+        loginPage.clickButtonEnter();
+        String errorMessage = loginPage.getErrorMessage();
+        assertEquals("Неверный логин или пароль. Если забыли пароль, восстановите его", errorMessage);
     }
 
     @Test
-    @Order(2)
-    public void testLoginWithGeneratedInvalidData() {
-        loginMethods.openLoginPage();
-
-        loginMethods.enterEmail(AVLoginPage.getRandomEmail());
-        loginMethods.enterPassword(AVLoginPage.getRandomPassword());
-        loginMethods.clickSubmit();
-
-        String errorMessage = loginMethods.getEmailErrorMessage();
-        String expectedEmailError = "Неверный логин или пароль. Если забыли пароль, восстановите его";
-
-        if (errorMessage != null) {
-            Assertions.assertEquals(expectedEmailError, errorMessage, "Сообщение об ошибке под полем email неверное.");
-            System.out.println("Сообщение об ошибке: " + errorMessage);
-        } else {
-            System.out.println("Ошибок нет.");
-        }
+    public void testInvalidEmailWithoutDomain() {
+        loginPage.inputEmail("user@");
+        loginPage.inputPassword("validPassword123");
+        loginPage.clickButtonEnter();
+        String errorMessage = loginPage.getErrorMessage();
+        assertEquals("Неверный логин или пароль. Если забыли пароль, восстановите его", errorMessage);
     }
 
     @Test
-    @Order(3)
-    public void testLoginWithSpacesInFields() {
-        loginMethods.openLoginPage();
-
-        loginMethods.enterEmail(AVLoginPage.getSpaceForEmail());
-        loginMethods.enterPassword(AVLoginPage.getSpaceForPassword());
-        loginMethods.clickSubmit();
-
-        String expectedEmailError = "Заполните оба поля";
-        String expectedPasswordError = "Заполните поле";
-
-        String emailError = loginMethods.getEmailErrorMessage();
-        if (emailError != null) {
-            Assertions.assertEquals(expectedEmailError, emailError, "Сообщение об ошибке под полем email неверное.");
-
-        }
-
-        String passwordError = loginMethods.getPasswordErrorMessage();
-        if (passwordError != null) {
-            Assertions.assertEquals(expectedPasswordError, passwordError, "Сообщение об ошибке под полем пароля неверное.");
-        }
-
-        if (expectedEmailError.equals(emailError) && expectedPasswordError.equals(passwordError)) {
-            System.out.println("Ошибок нет.");
-        }
+    public void testSpacesInBothFields() {
+        loginPage.inputEmail(" ");
+        loginPage.inputPassword(" ");
+        loginPage.clickButtonEnter();
+        String errorMessage = loginPage.getErrorMessage();
+        assertEquals("Заполните оба поля", errorMessage);
     }
 
     @Test
-    @Order(4)
-    public void testLoginWithOneInFields() {
-        loginMethods.openLoginPage();
-
-        loginMethods.enterEmail(AVLoginPage.getOneForEmailAndPassword());
-        loginMethods.enterPassword(AVLoginPage.getOneForEmailAndPassword());
-        loginMethods.clickSubmit();
-
-        String expectedEmailError = "";
+    public void testOnlyDigitsInEmail() {
+        loginPage.inputEmail("1234567890");
+        loginPage.inputPassword("1");
+        loginPage.clickButtonEnter();
+        String errorMessage = loginPage.getErrorMessage();
+        assertEquals("Вы не можете использовать для входа логин или почту удаленного аккаунта", errorMessage);
     }
 
     @AfterEach
     public void tearDown() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }
