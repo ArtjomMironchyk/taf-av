@@ -1,4 +1,4 @@
-package by.av.mironchyk;
+package page;
 
 public class LoginPageXPath {
     public static final String TAB_LOGIN_BY_EMAIL_XPATH = "//button[text()='почте или логину']";

@@ -1,5 +1,7 @@
 package by.av.mironchyk;
 
+import page.HomePage;
+import page.LoginPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +49,8 @@ public class AVLoginTest {
         loginPage.clickButtonEnter();
         String errorMessage = loginPage.getEmailErrorMessage();
         assertEquals("Заполните оба поля", errorMessage);
+        String errorPassword = loginPage.getPasswordErrorMessage();
+        assertEquals("Заполните поле", errorPassword);
     }
 
     @Test
