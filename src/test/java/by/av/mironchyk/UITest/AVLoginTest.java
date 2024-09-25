@@ -2,12 +2,15 @@ package by.av.mironchyk.UITest;
 
 import by.av.mironchyk.page.HomePage;
 import by.av.mironchyk.page.LoginPage;
+import by.av.mironchyk.page.constants.ErrorMessages;
 import by.av.mironchyk.page.utils.TestDataGenerator;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AVLoginTest {
@@ -26,55 +29,56 @@ public class AVLoginTest {
         loginPage.clickTabLoginByEmail();
     }
 
-    @Test
-    public void testInvalidEmailWithoutAtSymbol() {
-        loginPage.inputEmail("emailwithoutat.com");
-        loginPage.inputPassword("validPassword123");
+    @ParameterizedTest
+    @MethodSource("invalidEmails")
+    public void testInvalidEmails(String email) {
+        String validPassword = TestDataGenerator.generateValidPassword();
+
+        loginPage.inputEmail(email);
+        loginPage.inputPassword(validPassword);
         loginPage.clickButtonEnter();
+
         String errorMessage = loginPage.getErrorMessage();
-        assertEquals("Неверный логин или пароль. Если забыли пароль, восстановите его", errorMessage);
+        assertEquals(ErrorMessages.INVALID_LOGIN_OR_PASSWORD, errorMessage);
+    }
+
+    static Stream<String> invalidEmails() {
+        return Stream.of(
+                TestDataGenerator.generateInvalidEmail(),
+                TestDataGenerator.generateEmailWithoutAtSymbol(),
+                TestDataGenerator.generateEmailWithoutDomain(),
+                TestDataGenerator.generateOnlyDigitsEmail(),
+                TestDataGenerator.generateSpecialCharacters(10)
+        );
     }
 
     @Test
-    public void testInvalidEmailWithoutDomain() {
-        loginPage.inputEmail("user@");
-        loginPage.inputPassword("validPassword123");
+    public void testInvalidPasswordGenerated() {
+        String validEmail = TestDataGenerator.generateValidEmail();
+        String invalidPassword = TestDataGenerator.generateInvalidPassword();
+
+        loginPage.inputEmail(validEmail);
+        loginPage.inputPassword(invalidPassword);
         loginPage.clickButtonEnter();
+
         String errorMessage = loginPage.getErrorMessage();
-        assertEquals("Неверный логин или пароль. Если забыли пароль, восстановите его", errorMessage);
+        assertEquals(ErrorMessages.INVALID_LOGIN_OR_PASSWORD, errorMessage);
     }
 
     @Test
     public void testSpacesInBothFields() {
-        loginPage.inputEmail(" ");
-        loginPage.inputPassword(" ");
+        String spacesEmail = TestDataGenerator.generateSpaces(1);
+        String spacesPassword = TestDataGenerator.generateSpaces(1);
+
+        loginPage.inputEmail(spacesEmail);
+        loginPage.inputPassword(spacesPassword);
         loginPage.clickButtonEnter();
+
         String errorEmail = loginPage.getEmailErrorMessage();
-        assertEquals("Заполните оба поля", errorEmail);
+        assertEquals(ErrorMessages.FILL_BOTH_FIELDS, errorEmail);
+
         String errorPassword = loginPage.getPasswordErrorMessage();
-        assertEquals("Заполните поле", errorPassword);
-    }
-
-    @Test
-    public void testOnlyDigitsInEmail() {
-        loginPage.inputEmail("1234567890");
-        loginPage.inputPassword("1");
-        loginPage.clickButtonEnter();
-        String errorMessage = loginPage.getErrorMessage();
-        assertEquals("Вы не можете использовать для входа логин или почту удаленного аккаунта", errorMessage);
-    }
-
-    @Test
-    public void testGeneratedEmailAndPassword() {
-        String generatedEmail = TestDataGenerator.generateEmail();
-        String generatedPassword = TestDataGenerator.generatePassword();
-
-        loginPage.inputEmail(generatedEmail);
-        loginPage.inputPassword(generatedPassword);
-        loginPage.clickButtonEnter();
-
-        String errorMessage = loginPage.getErrorMessage();
-        assertEquals("Неверный логин или пароль. Если забыли пароль, восстановите его", errorMessage);
+        assertEquals(ErrorMessages.FILL_FIELD, errorPassword);
     }
 
     @AfterEach
