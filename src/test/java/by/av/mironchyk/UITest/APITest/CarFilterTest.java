@@ -59,4 +59,3 @@ public class CarFilterTest {
                 .body("adverts[0].year", equalTo(2024));
     }
 }
-

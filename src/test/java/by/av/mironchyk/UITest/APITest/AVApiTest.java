@@ -11,7 +11,7 @@ public class AVApiTest {
 
     @BeforeAll
     public static void setup() {
-        RestAssured.baseURI = "https://api.av.by"; // Устанавливаем базовый URL API
+        RestAssured.baseURI = "https://api.av.by";
     }
 
     @Test
