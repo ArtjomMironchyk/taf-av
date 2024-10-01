@@ -1,4 +1,4 @@
-package by.av.mironchyk.page.utils;
+package by.av.mironchyk.utils;
 
 import com.github.javafaker.Faker;
 
@@ -11,7 +11,7 @@ public class TestDataGenerator {
     }
 
     public static String generateInvalidEmail() {
-        return faker.lorem().characters(10); // Генерирует строку из 10 случайных символов
+        return faker.lorem().characters(10);
     }
 
     public static String generateEmailWithoutAtSymbol() {
@@ -45,6 +45,6 @@ public class TestDataGenerator {
     }
 
     public static String generateInvalidPassword() {
-        return faker.lorem().characters(5); // Генерирует короткий пароль
+        return faker.lorem().characters(5);
     }
 }

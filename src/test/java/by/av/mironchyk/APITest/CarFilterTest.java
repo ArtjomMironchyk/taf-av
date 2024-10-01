@@ -1,10 +1,9 @@
-package by.av.mironchyk.UITest.APITest;
+package by.av.mironchyk.APITest;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 

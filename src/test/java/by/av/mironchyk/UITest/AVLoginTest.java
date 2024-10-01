@@ -2,8 +2,8 @@ package by.av.mironchyk.UITest;
 
 import by.av.mironchyk.page.HomePage;
 import by.av.mironchyk.page.LoginPage;
-import by.av.mironchyk.page.constants.ErrorMessages;
-import by.av.mironchyk.page.utils.TestDataGenerator;
+import by.av.mironchyk.constants.ErrorMessages;
+import by.av.mironchyk.utils.TestDataGenerator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
