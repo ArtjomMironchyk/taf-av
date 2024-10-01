@@ -1,6 +1,6 @@
 package by.av.mironchyk.page;
 
-import by.av.mironchyk.page.utils.WaitUtils;
+import by.av.mironchyk.utils.WaitUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

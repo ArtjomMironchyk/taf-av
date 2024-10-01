@@ -1,4 +1,4 @@
-package by.av.mironchyk.page.utils;
+package by.av.mironchyk.utils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

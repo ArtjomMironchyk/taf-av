@@ -1,4 +1,4 @@
-package by.av.mironchyk.page.constants;
+package by.av.mironchyk.constants;
 
 public class ErrorMessages {
     public static final String INVALID_LOGIN_OR_PASSWORD = "Неверный логин или пароль. Если забыли пароль, восстановите его";

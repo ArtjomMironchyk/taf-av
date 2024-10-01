@@ -1,4 +1,4 @@
-package by.av.mironchyk.UITest.APITest;
+package by.av.mironchyk.APITest;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
